@@ -8,6 +8,7 @@ router.get("/tasks", authMiddleware, TaskController.getAll)
 router.get("/task/:taskId", authMiddleware, TaskController.getById)
 router.post("/task", authMiddleware, TaskController.create)
 router.put("/task/:taskId", authMiddleware, TaskController.update)
+router.patch("/task/:taskId/complete", authMiddleware, TaskController.complete)
 router.delete("/task/:taskId", authMiddleware, TaskController.delete)
 
 

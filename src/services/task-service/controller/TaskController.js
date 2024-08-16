@@ -16,11 +16,29 @@ class TaskController {
         }
     }
 
+    static async complete(req, res) {
+        try {
+            const taskId = parseInt(req.params.taskId);
+            const completedTask = await prisma.task.update({
+                where: {
+                    id: taskId
+                },
+                data: {
+                    status: "COMPLETE",
+                    dueDate: null
+                }
+            });
+
+            res.json({ message: "Task completed successfully!", task: completedTask });
+        } catch(err) {
+            res.status(500).json({ message: "Something went wrong! Please try again." });
+        }
+    }
 
     static async update(req, res) {
         try {
             const userId = parseInt(req.user.id);
-            const taskId = req.params.taskId;
+            const taskId = parseInt(req.params.taskId);
             const updatedTask = await prisma.task.update({
                 where: {
                     id: taskId
@@ -29,7 +47,7 @@ class TaskController {
                     ...req.body.task, userId
                 }
             });
-
+            console.log(updatedTask)
             res.json({ message: "Task updated successfully!", task: updatedTask });
         } catch(err) {
             res.status(500).json({ message: "Something went wrong! Please try again." });
