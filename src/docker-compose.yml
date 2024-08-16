@@ -1,5 +1,5 @@
 services:
-  db-user:
+    db-user:
         container_name: db-user
         hostname: db-user
         environment:
@@ -12,7 +12,20 @@ services:
         restart: on-failure
         volumes:
             - db-user-data:/var/lib/postgresql/data
-  app-user:
+    db-task:
+        container_name: db-task
+        hostname: db-task
+        environment:
+            - POSTGRES_HOST_AUTH_METHOD=trust
+        image: postgres:latest
+        networks:
+            - main
+        expose:
+            - "5432:5432"
+        restart: on-failure
+        volumes:
+            - db-task-data:/var/lib/postgresql/data
+    app-user:
         build: ./services/user-service
         command: sh -c "npm run dbMigrate && npm run dbSeed && npm run start"
         ports: 
@@ -22,7 +35,18 @@ services:
         networks: 
             - main
         restart: on-failure
+    app-task:
+        build: ./services/task-service
+        command: sh -c "npm run dbMigrate && npm run start"
+        ports: 
+            - "3002:3002"
+        depends_on:
+            - db-task
+        networks: 
+            - main
+        restart: on-failure
 networks:
     main:
 volumes:
     db-user-data:
+    db-task-data:

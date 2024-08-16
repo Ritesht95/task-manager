@@ -9,10 +9,10 @@ app.use(express.urlencoded({extended: false}));
 app.use(cors());
 
 app.get("/", (req, res) => {
-    return res.json({ message: "Welcome to User Service" });
+    return res.json({ message: "Welcome to Task Service" });
 });
 
 import Routes from "./routes/index.js";
 app.use(Routes);
 
-app.listen(PORT, () => console.log(`User service is running on PORT ${PORT}`));
+app.listen(PORT, () => console.log(`Task service is running on PORT ${PORT}`));

@@ -19,7 +19,6 @@ class AuthController {
         }
     }
 
-
     static async login(req, res) {
         const { email, password } = req.body;
 
@@ -49,6 +48,13 @@ class AuthController {
         } else {
             res.status(401).json({ message: "Invalid Email!" });
         }
+    }
+
+    static async userMe(req, res) {
+        const user = req.user;
+        delete user.iat;
+        delete user.exp;
+        res.json({ user })
     }
 }
 
